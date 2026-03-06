@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Client-Server Demo</title>
+    <title>📚 Thư viện Sách - Client-Server Demo</title>
     <style>
       * {
         margin: 0;
@@ -14,58 +14,143 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 20px;
       }
       .container {
         background: white;
-        padding: 40px;
+        padding: 30px;
         border-radius: 20px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        max-width: 500px;
-        width: 90%;
+        max-width: 900px;
+        margin: 0 auto;
       }
       h1 {
         color: #333;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
+        text-align: center;
       }
       .subtitle {
         color: #666;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
         font-size: 14px;
+        text-align: center;
+      }
+      .diagram {
+        margin: 15px 0;
+        padding: 12px;
+        background: #e8f4f8;
+        border-radius: 10px;
+        font-family: monospace;
+        font-size: 12px;
+        text-align: center;
+      }
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
       }
       .btn {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        padding: 15px 30px;
-        font-size: 16px;
-        border-radius: 30px;
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 25px;
         cursor: pointer;
-        margin: 10px;
         transition:
           transform 0.3s,
           box-shadow 0.3s;
       }
       .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
       }
-      .btn:active {
-        transform: translateY(0);
+      .btn.secondary {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
       }
+      .btn.warning {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      /* Stats Section */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .stat-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+        border-left: 4px solid #667eea;
+      }
+      .stat-card .number {
+        font-size: 28px;
+        font-weight: bold;
+        color: #667eea;
+      }
+      .stat-card .label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* Books Table */
+      .books-section {
+        margin-top: 20px;
+      }
+      .books-section h3 {
+        color: #333;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+      th {
+        background: #667eea;
+        color: white;
+        font-weight: 500;
+      }
+      tr:hover {
+        background: #f8f9fa;
+      }
+      .status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .status.available {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status.borrowed {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      /* Result Box */
       .result-box {
-        margin-top: 30px;
-        padding: 20px;
+        margin-top: 20px;
+        padding: 15px;
         background: #f8f9fa;
         border-radius: 10px;
         border-left: 4px solid #667eea;
-        text-align: left;
-        min-height: 80px;
       }
-      .result-box h3 {
+      .result-box h4 {
         color: #667eea;
         margin-bottom: 10px;
         font-size: 14px;
@@ -76,78 +161,264 @@
         padding: 15px;
         border-radius: 8px;
         overflow-x: auto;
-        font-size: 13px;
+        font-size: 12px;
+        max-height: 300px;
+        overflow-y: auto;
       }
       .loading {
         color: #999;
         font-style: italic;
       }
-      .diagram {
-        margin: 20px 0;
+
+      /* Category filter */
+      .filter-section {
+        margin: 15px 0;
         padding: 15px;
-        background: #e8f4f8;
+        background: #fff3cd;
         border-radius: 10px;
-        font-family: monospace;
-        font-size: 12px;
+      }
+      .filter-section label {
+        font-weight: 500;
+        margin-right: 10px;
+      }
+      .filter-section select,
+      .filter-section input {
+        padding: 8px 15px;
+        border-radius: 20px;
+        border: 2px solid #667eea;
+        font-size: 14px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>🖥️ Client-Server Demo</h1>
-      <p class="subtitle">Kiến trúc REST API cơ bản</p>
+      <h1>📚 Thư viện Sách</h1>
+      <p class="subtitle">Demo Client-Server Architecture với REST API</p>
 
       <div class="diagram">
-        <strong>Client (Browser)</strong> ←→ <strong>Server (Flask)</strong
-        ><br />
-        Request → | ← Response (JSON)
+        <strong>Client (Browser)</strong>
+        → HTTP Request →
+        <strong>Server (Flask)</strong>
+        → JSON Response →
+        <strong>Client hiển thị</strong>
       </div>
 
-      <div class="buttons">
-        <button class="btn" onclick="sayHello()">👋 Gọi API Hello</button>
-        <button class="btn" onclick="getTime()">⏰ Lấy Thời Gian</button>
+      <!-- Buttons -->
+      <div class="btn-group">
+        <button class="btn" onclick="getAllBooks()">📖 Tất cả sách</button>
+        <button class="btn secondary" onclick="getAvailableBooks()">
+          ✅ Sách có sẵn
+        </button>
+        <button class="btn warning" onclick="getStats()">📊 Thống kê</button>
       </div>
 
+      <!-- Category Filter -->
+      <div class="filter-section">
+        <label>🔍 Lọc theo danh mục:</label>
+        <select id="categorySelect" onchange="filterByCategory()">
+          <option value="">-- Chọn danh mục --</option>
+          <option value="Công nghệ">Công nghệ</option>
+          <option value="Văn học">Văn học</option>
+          <option value="Kỹ năng sống">Kỹ năng sống</option>
+        </select>
+
+        <label style="margin-left: 20px">🔎 Tìm theo ID:</label>
+        <input
+          type="number"
+          id="bookIdInput"
+          min="1"
+          placeholder="Nhập ID"
+          style="width: 100px"
+        />
+        <button class="btn" onclick="getBookById()" style="padding: 8px 15px">
+          Tìm
+        </button>
+      </div>
+
+      <!-- Stats Display -->
+      <div id="statsSection" class="stats-grid" style="display: none">
+        <div class="stat-card">
+          <div class="number" id="totalBooks">0</div>
+          <div class="label">Tổng số sách</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="availableBooks">0</div>
+          <div class="label">Có sẵn</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="borrowedBooks">0</div>
+          <div class="label">Đang mượn</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="categoriesCount">0</div>
+          <div class="label">Danh mục</div>
+        </div>
+      </div>
+
+      <!-- Books Table -->
+      <div class="books-section">
+        <h3>📋 Danh sách sách</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên sách</th>
+              <th>Tác giả</th>
+              <th>Năm</th>
+              <th>Danh mục</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody id="booksTable">
+            <tr>
+              <td colspan="6" class="loading" style="text-align: center">
+                Nhấn nút để tải dữ liệu từ Server...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Raw JSON Response -->
       <div class="result-box">
-        <h3>📦 Response từ Server:</h3>
+        <h4>📦 Raw JSON Response từ Server:</h4>
         <pre
-          id="result"
-        ><span class="loading">Nhấn nút để gửi request...</span></pre>
+          id="jsonResult"
+        ><span class="loading">Response sẽ hiển thị ở đây...</span></pre>
       </div>
     </div>
 
     <script>
-      const resultBox = document.getElementById("result");
+      const booksTable = document.getElementById("booksTable");
+      const jsonResult = document.getElementById("jsonResult");
+      const statsSection = document.getElementById("statsSection");
 
-      // Hàm gọi API /api/hello
-      async function sayHello() {
-        resultBox.innerHTML =
-          '<span class="loading">Đang gửi request...</span>';
+      // Render books to table
+      function renderBooks(books) {
+        if (books.length === 0) {
+          booksTable.innerHTML =
+            '<tr><td colspan="6" style="text-align: center;">Không có sách nào</td></tr>';
+          return;
+        }
 
+        booksTable.innerHTML = books
+          .map(
+            (book) => `
+                <tr>
+                    <td>${book.id}</td>
+                    <td><strong>${book.title}</strong></td>
+                    <td>${book.author}</td>
+                    <td>${book.year}</td>
+                    <td>${book.category}</td>
+                    <td>
+                        <span class="status ${book.available ? "available" : "borrowed"}">
+                            ${book.available ? "✅ Có sẵn" : "📕 Đang mượn"}
+                        </span>
+                    </td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      // API: Get all books
+      async function getAllBooks() {
+        statsSection.style.display = "none";
         try {
-          const response = await fetch("/api/hello");
+          const response = await fetch("/api/books");
           const data = await response.json();
 
-          resultBox.textContent = JSON.stringify(data, null, 2);
+          jsonResult.textContent = JSON.stringify(data, null, 2);
+          renderBooks(data.data);
         } catch (error) {
-          resultBox.textContent = "Lỗi: " + error.message;
+          jsonResult.textContent = "Lỗi: " + error.message;
         }
       }
 
-      // Hàm gọi API /api/time
-      async function getTime() {
-        resultBox.innerHTML =
-          '<span class="loading">Đang gửi request...</span>';
-
+      // API: Get available books
+      async function getAvailableBooks() {
+        statsSection.style.display = "none";
         try {
-          const response = await fetch("/api/time");
+          const response = await fetch("/api/books/available");
           const data = await response.json();
 
-          resultBox.textContent = JSON.stringify(data, null, 2);
+          jsonResult.textContent = JSON.stringify(data, null, 2);
+          renderBooks(data.data);
         } catch (error) {
-          resultBox.textContent = "Lỗi: " + error.message;
+          jsonResult.textContent = "Lỗi: " + error.message;
         }
       }
+
+      // API: Get stats
+      async function getStats() {
+        try {
+          const response = await fetch("/api/stats");
+          const data = await response.json();
+
+          jsonResult.textContent = JSON.stringify(data, null, 2);
+
+          // Update stats cards
+          document.getElementById("totalBooks").textContent =
+            data.data.total_books;
+          document.getElementById("availableBooks").textContent =
+            data.data.available_books;
+          document.getElementById("borrowedBooks").textContent =
+            data.data.borrowed_books;
+          document.getElementById("categoriesCount").textContent =
+            data.data.categories.length;
+
+          statsSection.style.display = "grid";
+        } catch (error) {
+          jsonResult.textContent = "Lỗi: " + error.message;
+        }
+      }
+
+      // API: Filter by category
+      async function filterByCategory() {
+        const category = document.getElementById("categorySelect").value;
+        if (!category) return;
+
+        statsSection.style.display = "none";
+        try {
+          const response = await fetch(
+            `/api/books/category/${encodeURIComponent(category)}`,
+          );
+          const data = await response.json();
+
+          jsonResult.textContent = JSON.stringify(data, null, 2);
+          renderBooks(data.data);
+        } catch (error) {
+          jsonResult.textContent = "Lỗi: " + error.message;
+        }
+      }
+
+      // API: Get book by ID
+      async function getBookById() {
+        const bookId = document.getElementById("bookIdInput").value;
+        if (!bookId) {
+          alert("Vui lòng nhập ID sách!");
+          return;
+        }
+
+        statsSection.style.display = "none";
+        try {
+          const response = await fetch(`/api/books/${bookId}`);
+          const data = await response.json();
+
+          jsonResult.textContent = JSON.stringify(data, null, 2);
+
+          if (data.success) {
+            renderBooks([data.data]);
+          } else {
+            booksTable.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">${data.message}</td></tr>`;
+          }
+        } catch (error) {
+          jsonResult.textContent = "Lỗi: " + error.message;
+        }
+      }
+
+      // Load all books on page load
+      window.onload = getAllBooks;
     </script>
   </body>
 </html>
