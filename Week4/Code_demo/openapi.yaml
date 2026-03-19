@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: Simple Books API
+  version: 1.0.0
+  description: Simple Books Management API with Flask.
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+tags:
+  - name: Books
+    description: Book catalog operations
+paths:
+  /books:
+    get:
+      tags:
+        - Books
+      summary: List books
+      responses:
+        "200":
+          description: A list of books.
+          content:
+            application/json:
+              example:
+                - id: "1"
+                  title: "Clean Code"
+                  author: "Robert C. Martin"
+                  publishedYear: 2008
+                  genre: "Software Engineering"
+                - id: "2"
+                  title: "The Pragmatic Programmer"
+                  author: "Andrew Hunt, David Thomas"
+                  publishedYear: 1999
+                  genre: "Software Engineering"
+    post:
+      tags:
+        - Books
+      summary: Create a book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: "Domain-Driven Design"
+              author: "Eric Evans"
+              publishedYear: 2003
+              genre: "Software Architecture"
+      responses:
+        "201":
+          description: Book created.
+          content:
+            application/json:
+              example:
+                id: "3"
+                title: "Domain-Driven Design"
+                author: "Eric Evans"
+                publishedYear: 2003
+                genre: "Software Architecture"
+  /books/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Books
+      summary: Get a book by ID
+      responses:
+        "200":
+          description: Book details.
+          content:
+            application/json:
+              example:
+                id: "1"
+                title: "Clean Code"
+                author: "Robert C. Martin"
+                publishedYear: 2008
+                genre: "Software Engineering"
+        "404":
+          description: Book not found.
+    put:
+      tags:
+        - Books
+      summary: Update a book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: "Clean Code (Revised)"
+              author: "Robert C. Martin"
+              publishedYear: 2008
+              genre: "Software Engineering"
+      responses:
+        "200":
+          description: Book updated.
+        "404":
+          description: Book not found.
+    delete:
+      tags:
+        - Books
+      summary: Delete a book
+      responses:
+        "204":
+          description: Book deleted.
+        "404":
+          description: Book not found.
