@@ -20,17 +20,10 @@ paths:
           description: A list of books.
           content:
             application/json:
-              example:
-                - id: "1"
-                  title: "Clean Code"
-                  author: "Robert C. Martin"
-                  publishedYear: 2008
-                  genre: "Software Engineering"
-                - id: "2"
-                  title: "The Pragmatic Programmer"
-                  author: "Andrew Hunt, David Thomas"
-                  publishedYear: 1999
-                  genre: "Software Engineering"
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Book"
     post:
       tags:
         - Books
@@ -39,29 +32,18 @@ paths:
         required: true
         content:
           application/json:
-            example:
-              title: "Domain-Driven Design"
-              author: "Eric Evans"
-              publishedYear: 2003
-              genre: "Software Architecture"
+            schema:
+              $ref: "#/components/schemas/NewBook"
       responses:
         "201":
           description: Book created.
           content:
             application/json:
-              example:
-                id: "3"
-                title: "Domain-Driven Design"
-                author: "Eric Evans"
-                publishedYear: 2003
-                genre: "Software Architecture"
+              schema:
+                $ref: "#/components/schemas/Book"
   /books/{id}:
     parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: string
+      - $ref: "#/components/parameters/BookId"
     get:
       tags:
         - Books
@@ -71,12 +53,8 @@ paths:
           description: Book details.
           content:
             application/json:
-              example:
-                id: "1"
-                title: "Clean Code"
-                author: "Robert C. Martin"
-                publishedYear: 2008
-                genre: "Software Engineering"
+              schema:
+                $ref: "#/components/schemas/Book"
         "404":
           description: Book not found.
     put:
@@ -87,14 +65,15 @@ paths:
         required: true
         content:
           application/json:
-            example:
-              title: "Clean Code (Revised)"
-              author: "Robert C. Martin"
-              publishedYear: 2008
-              genre: "Software Engineering"
+            schema:
+              $ref: "#/components/schemas/NewBook"
       responses:
         "200":
           description: Book updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
         "404":
           description: Book not found.
     delete:
@@ -106,3 +85,56 @@ paths:
           description: Book deleted.
         "404":
           description: Book not found.
+
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - id
+        - title
+        - author
+        - publishedYear
+      properties:
+        id:
+          type: string
+          example: "1"
+        title:
+          type: string
+          example: "Clean Code"
+        author:
+          type: string
+          example: "Robert C. Martin"
+        publishedYear:
+          type: integer
+          example: 2008
+        genre:
+          type: string
+          example: "Software Engineering"
+    NewBook:
+      type: object
+      required:
+        - title
+        - author
+        - publishedYear
+      properties:
+        title:
+          type: string
+          example: "Clean Code"
+        author:
+          type: string
+          example: "Robert C. Martin"
+        publishedYear:
+          type: integer
+          example: 2008
+        genre:
+          type: string
+          example: "Software Engineering"
+  parameters:
+    BookId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique identifier of the book
