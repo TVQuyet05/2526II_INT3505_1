@@ -1,0 +1,72 @@
+FORMAT: 1A
+HOST: http://localhost:5000
+
+# Simple Books API
+API quản lý sách đơn giản với thiết kế theo phong cách API Blueprint.
+
+# Group Books
+Các thao tác liên quan đến kho sách.
+
+## Books Collection [/books]
+
+### List all books [GET]
++ Response 200 (application/json)
+    + Attributes (array[Book])
+
+### Create a new book [POST]
++ Request (application/json)
+    + Attributes (NewBook)
+
++ Response 201 (application/json)
+    + Attributes (Book)
+
+## Book Details [/books/{id}]
++ Parameters
+    + id: `1` (string, required) - ID duy nhất của cuốn sách.
+
+### Get a book by ID [GET]
++ Response 200 (application/json)
+    + Attributes (Book)
+
++ Response 404 (application/json)
+    + Body
+            {
+                "error": "Book not found"
+            }
+
+### Update a book [PUT]
++ Request (application/json)
+    + Attributes (NewBook)
+
++ Response 200 (application/json)
+    + Attributes (Book)
+
++ Response 404 (application/json)
+    + Body
+            {
+                "error": "Book not found"
+            }
+
+### Delete a book [DELETE]
++ Response 204
+
++ Response 404 (application/json)
+    + Body
+            {
+                "error": "Book not found"
+            }
+
+# Data Structures
+
+## Book (object)
++ id: `1` (string, required)
++ title: `Clean Code` (string, required)
++ author: `Robert C. Martin` (string, required)
++ publishedYear: 2008 (number, required)
++ genre: `Software Engineering` (string, optional)
+
+## NewBook (object)
++ title: `Clean Code` (string, required)
++ author: `Robert C. Martin` (string, required)
++ publishedYear: 2008 (number, required)
++ genre: `Software Engineering` (string, optional)

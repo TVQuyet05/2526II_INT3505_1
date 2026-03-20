@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: Simple Books API
+  version: 0.0.0
+tags:
+  - name: Books
+paths:
+  /books:
+    get:
+      operationId: BooksAction_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+      tags:
+        - Books
+    post:
+      operationId: BooksAction_create
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBook'
+  /books/{id}:
+    get:
+      operationId: BooksAction_getBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: The server cannot find the requested resource.
+      tags:
+        - Books
+    put:
+      operationId: BooksAction_updateBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: The server cannot find the requested resource.
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBook'
+    delete:
+      operationId: BooksAction_deleteBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        '404':
+          description: The server cannot find the requested resource.
+      tags:
+        - Books
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - id
+        - title
+        - author
+        - publishedYear
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        publishedYear:
+          type: integer
+          format: int32
+        genre:
+          type: string
+    NewBook:
+      type: object
+      required:
+        - title
+        - author
+        - publishedYear
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        publishedYear:
+          type: integer
+          format: int32
+        genre:
+          type: string
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+    variables: {}

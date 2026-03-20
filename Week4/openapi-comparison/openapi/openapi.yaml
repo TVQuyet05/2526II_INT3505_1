@@ -4,8 +4,6 @@ info:
   version: 1.0.0
   description: Simple Books Management API with Flask.
 servers:
-  - url: https://bookswagger.vercel.app/
-    description: Live development server
   - url: http://localhost:5000
     description: Local development server
 

@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  description: Simple Books Management API with Flask.
+  title: Simple Books API
+  version: 1.0.0
+servers:
+- description: Live development server
+  url: https://bookswagger.vercel.app/
+- description: Local development server
+  url: http://localhost:5000
+tags:
+- description: Book catalog operations
+  name: Books
+paths:
+  /books:
+    get:
+      operationId: books_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Book"
+                type: array
+          description: A list of books.
+      summary: List books
+      tags:
+      - Books
+      x-openapi-router-controller: openapi_server.controllers.books_controller
+    post:
+      operationId: books_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBook"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+          description: Book created.
+      summary: Create a book
+      tags:
+      - Books
+      x-openapi-router-controller: openapi_server.controllers.books_controller
+  /books/{id}:
+    delete:
+      operationId: books_id_delete
+      parameters:
+      - description: The unique identifier of the book
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Book deleted.
+        "404":
+          description: Book not found.
+      summary: Delete a book
+      tags:
+      - Books
+      x-openapi-router-controller: openapi_server.controllers.books_controller
+    get:
+      operationId: books_id_get
+      parameters:
+      - description: The unique identifier of the book
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+          description: Book details.
+        "404":
+          description: Book not found.
+      summary: Get a book by ID
+      tags:
+      - Books
+      x-openapi-router-controller: openapi_server.controllers.books_controller
+    put:
+      operationId: books_id_put
+      parameters:
+      - description: The unique identifier of the book
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewBook"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book"
+          description: Book updated.
+        "404":
+          description: Book not found.
+      summary: Update a book
+      tags:
+      - Books
+      x-openapi-router-controller: openapi_server.controllers.books_controller
+components:
+  parameters:
+    BookId:
+      description: The unique identifier of the book
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      style: simple
+  schemas:
+    Book:
+      example:
+        author: Robert C. Martin
+        genre: Software Engineering
+        id: "1"
+        publishedYear: 2008
+        title: Clean Code
+      properties:
+        id:
+          example: "1"
+          title: id
+          type: string
+        title:
+          example: Clean Code
+          title: title
+          type: string
+        author:
+          example: Robert C. Martin
+          title: author
+          type: string
+        publishedYear:
+          example: 2008
+          title: publishedYear
+          type: integer
+        genre:
+          example: Software Engineering
+          title: genre
+          type: string
+      required:
+      - author
+      - id
+      - publishedYear
+      - title
+      title: Book
+      type: object
+    NewBook:
+      example:
+        author: Robert C. Martin
+        genre: Software Engineering
+        publishedYear: 2008
+        title: Clean Code
+      properties:
+        title:
+          example: Clean Code
+          title: title
+          type: string
+        author:
+          example: Robert C. Martin
+          title: author
+          type: string
+        publishedYear:
+          example: 2008
+          title: publishedYear
+          type: integer
+        genre:
+          example: Software Engineering
+          title: genre
+          type: string
+      required:
+      - author
+      - publishedYear
+      - title
+      title: NewBook
+      type: object

@@ -1,0 +1,92 @@
+#%RAML 1.0
+title: Simple Books API
+version: v1
+baseUri: http://localhost:5000
+mediaType: application/json
+
+types:
+  Book:
+    type: object
+    properties:
+      id: string
+      title: string
+      author: string
+      publishedYear: integer
+      genre?: string
+    example:
+      id: "1"
+      title: "Clean Code"
+      author: "Robert C. Martin"
+      publishedYear: 2008
+      genre: "Software Engineering"
+
+  NewBook:
+    type: object
+    properties:
+      title: string
+      author: string
+      publishedYear: integer
+      genre?: string
+    example:
+      title: "Clean Code"
+      author: "Robert C. Martin"
+      publishedYear: 2008
+      genre: "Software Engineering"
+
+/books:
+  get:
+    description: List all books
+    responses:
+      200:
+        body:
+          application/json:
+            type: Book[]
+  post:
+    description: Create a new book
+    body:
+      application/json:
+        type: NewBook
+    responses:
+      201:
+        body:
+          application/json:
+            type: Book
+
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+        description: The unique identifier of the book
+    get:
+      description: Get a book by ID
+      responses:
+        200:
+          body:
+            application/json:
+              type: Book
+        404:
+          body:
+            application/json:
+              example: {"error": "Book not found"}
+    put:
+      description: Update a book
+      body:
+        application/json:
+          type: NewBook
+      responses:
+        200:
+          body:
+            application/json:
+              type: Book
+        404:
+          body:
+            application/json:
+              example: {"error": "Book not found"}
+    delete:
+      description: Delete a book
+      responses:
+        204:
+        404:
+          body:
+            application/json:
+              example: {"error": "Book not found"}
