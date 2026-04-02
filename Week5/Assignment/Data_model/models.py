@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Enum, DateTime
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Enum, DateTime, create_engine
 from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
 import enum
@@ -66,3 +66,13 @@ Cấu trúc quan hệ (Entity-Relationship):
    - Là bảng trung gian kết nối Member và Book.
    - Chứa thông tin về ngày mượn, hạn trả, ngày thực trả và trạng thái (Đang mượn, đã trả, quá hạn).
 """
+
+if __name__ == '__main__':
+    # 1. Tạo engine kết nối tới file database SQLite (library.db trong cùng thư mục)
+    # echo=True sẽ in ra các câu lệnh SQL tự động sinh ra trên terminal
+    engine = create_engine('sqlite:///library.db', echo=True)
+    
+    # 2. Sinh các bảng trong CSDL dựa trên các class kế thừa từ Base
+    Base.metadata.create_all(engine)
+    
+    print("\n--- Tạo cơ sở dữ liệu library.db và các bảng thành công! ---")
