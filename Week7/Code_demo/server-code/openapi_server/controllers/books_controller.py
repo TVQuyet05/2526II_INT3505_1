@@ -16,7 +16,17 @@ def books_get():  # noqa: E501
 
     :rtype: Union[List[Book], Tuple[List[Book], int], Tuple[List[Book], int, Dict[str, str]]
     """
-    return 'do some magic!'
+    # Khởi tạo dữ liệu giả lập chuẩn OpenAPI (danh sách Book)
+    mock_book = {
+        "id": "1",
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "publishedYear": 2008,
+        "genre": "Software Engineering"
+    }
+    
+    # Trả về một List chứa Object
+    return [mock_book]
 
 
 def books_id_delete(id):  # noqa: E501
