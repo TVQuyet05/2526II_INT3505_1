@@ -1,1 +1,19 @@
 Flask==3.0.0
+
+
+# Kính gửi Developers,
+
+# Chúng tôi xin thông báo API v1/payment (mặc định xử lý bằng khối tiền tệ VND) đang bước vào giai đoạn Deprecation (Ngưng hỗ trợ) kể từ ngày hôm nay.
+
+# Lý do thay đổi:
+# Hệ thống hiện tại đang nâng cấp để hỗ trợ thanh toán Đa tiền tệ (Multi-currency). Do đó, phiên bản v1 không còn phù hợp với kiến trúc mới.
+
+# Kế hoạch chuyển đổi:
+
+# API Thay thế: Vui lòng chuyển sang sử dụng v2/payment. Ở phiên bản này, trường currency ("VND", "USD", v.v.) là bắt buộc trong payload.
+# Thời hạn Sunset (Khai tử hoàn toàn): Ngày 31 Tháng 12 Năm 2026.
+# Sau ngày Sunset, mọi yêu cầu (requests) gửi đến v1/payment sẽ bị từ chối với mã lỗi 410 Gone hoặc chuyển hướng.
+# Vui lòng cập nhật hệ thống của bạn sớm nhất có thể. Chi tiết hướng dẫn nâng cấp xem tại tài liệu: <Link_tới_Document_Migration>
+
+# Trân trọng,
+# Đội ngũ Phát triển
