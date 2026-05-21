@@ -5,8 +5,28 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from pythonjsonlogger import jsonlogger
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+import os
 
 app = Flask(__name__)
+
+# Cấu hình OpenTelemetry Tracing
+resource = Resource.create({"service.name": "flask-demo-app"})
+provider = TracerProvider(resource=resource)
+trace.set_tracer_provider(provider)
+
+# Ghi tự động Trace ra Console và gửi đến Jaeger OTLP collector
+provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
+otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4318/v1/traces")
+provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+
+# Tự động Instrument ứng dụng Flask
+FlaskInstrumentor().instrument_app(app)
 
 # Configure JSON Logging
 logger = logging.getLogger("flask_app")
@@ -52,12 +72,16 @@ def after_request(response):
     ).observe(request_latency)
     
     # Audit log
+    current_span = trace.get_current_span()
+    trace_id = format(current_span.get_span_context().trace_id, "032x") if current_span.is_recording() else "None"
+
     logger.info("http_request", extra={
         "method": request.method,
         "path": request.path,
         "status": response.status_code,
         "ip": request.remote_addr,
-        "latency": request_latency
+        "latency": request_latency,
+        "trace_id": trace_id
     })
     return response
 
